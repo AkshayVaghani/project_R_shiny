@@ -29,8 +29,8 @@ shinyServer(function(input, output,session){
     output$plotcuisine=renderPlotly({
       plot_ly(data=reactcuisine(), x=~Total,y = ~factor(cuisine), 
              type = 'bar', color=~grade) %>% 
-        layout(xaxis = list(title = "Cuisine", showticklabels = TRUE),
-               yaxis = list(title = "Count"), showlegend = TRUE)
+        layout(xaxis = list(title = "Count", showticklabels = TRUE),
+               yaxis = list(title = "Cuisine"), showlegend = TRUE)
     })
     
     
@@ -60,11 +60,32 @@ shinyServer(function(input, output,session){
     output$plotcuisine_rev=renderPlotly({
       plot_ly(data=reactcuisine_rev(), x=~Total,y = ~factor(cuisine), 
               type = 'bar', color=~ratings1) %>% 
-        layout(xaxis = list(title = "Cuisine", showticklabels = TRUE),
-               yaxis = list(title = "Reviews Count"), showlegend = TRUE)
+        layout(xaxis = list(title = "Reviews Count", showticklabels = TRUE),
+               yaxis = list(title = "Cuisine"), showlegend = TRUE)
     })    
     
+# scatter plot between reviews and inspection score
+    
   
+    output$rev_insp_scat1= renderPlotly({ggplotly(ggplot(data=rev.insp.data, aes(y=rev.insp.data$score,x=rev.insp.data$rating, color = boro,alpha=0.1)) +
+      geom_point() + 
+      geom_jitter(width = 1, height = 1) + 
+      ggtitle("geom_jitter: scatterplots"))})
+    
+    # scattered plot to compare ratings and inspection score
+    pal <- c("red","blue","green","orange","yellow")
+    pal <- setNames(pal, c("BRONX", "BROOKLYN", "MANHATTAN","STATEN ISLAND","QUEENS"))
+    
+    output$rev_insp_scat= renderPlotly({plot_ly(data = rev.insp.data,type = 'scatter', x = ~rating,
+                 y = ~score, color = ~boro, colors = pal,
+                 text = paste("Name: ",inspections$name,  
+                              "<br>cuisine: ",inspections$cuisine, 
+                              "<br>grade: ",inspections$grade),
+                 hoverinfo = 'text',
+                 mode = 'markers')
+    })
+    
+    
 ################################################################################################
     
     output$map1 = renderLeaflet({
@@ -242,13 +263,13 @@ shinyServer(function(input, output,session){
     updateSelectizeInput(session, "boro_tb", choices = unique(yelp_insp_data$boro), server = TRUE)
     updateSelectizeInput(session, "cuisine_tb", choices = unique(yelp_insp_data$cuisine), server = TRUE)
     updateSelectizeInput(session, "score_tb", choices = unique(yelp_insp_data$grade), server = TRUE)
-    updateSelectizeInput(session, "review_tb", choices = unique(yelp_insp_data$ratings1), server = TRUE)
+    updateSelectizeInput(session, "rating_tb", choices = unique(yelp_insp_data$rating), server = TRUE)
   #  updateSelectizeInput(session, "boro_filter", choices = unique(nyc_crimes$BORO_NM), server = TRUE)
     ######################################
     
     ################################## FILTERING OF THE DATATABLE ##################################
     
-     filtered_data = yelp_insp_data
+    filtered_data = yelp_insp_data
     
     data_filter = reactive({
       if(length(input$boro_tb)) {
@@ -261,19 +282,12 @@ shinyServer(function(input, output,session){
         filtered_data = filtered_data %>% filter(.,grade== input$score_tb)
       }
       if(length(input$rating_tb)) {
-        filtered_data = filtered_data %>% filter(.,rating1 == input$rating_tb)
+        filtered_data = filtered_data %>% filter(.,rating == input$rating_tb)
       }
       return(filtered_data)
     })
     ################################################################################################
     
-    
-    
-    # show data using DataTable
-    output$table0 <- DT::renderDataTable({
-      datatable(yelp_insp_data, rownames=FALSE, options=list(scrollX=TRUE)) %>% 
-        formatStyle(input$selected1, background="skyblue", fontWeight='bold')
-    })
     
     # show data using DataTable
     output$table1 <- DT::renderDataTable({
