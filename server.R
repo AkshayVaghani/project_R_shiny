@@ -78,9 +78,9 @@ shinyServer(function(input, output,session){
     
     output$rev_insp_scat= renderPlotly({plot_ly(data = rev.insp.data,type = 'scatter', x = ~rating,
                  y = ~score, color = ~boro, colors = pal,
-                 text = paste("Name: ",inspections$name,  
-                              "<br>cuisine: ",inspections$cuisine, 
-                              "<br>grade: ",inspections$grade),
+                 text = paste("Name: ",rev.insp.data$name,  
+                              "<br>cuisine: ",rev.insp.data$cuisine, 
+                              "<br>grade: ",rev.insp.data$grade),
                  hoverinfo = 'text',
                  mode = 'markers')
     })
@@ -219,38 +219,6 @@ shinyServer(function(input, output,session){
 ###############################################################################################
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    # map without filters
-  
-    ## restaurant map
-    # output$map1 <- renderLeaflet({ leaflet(yelp_insp_data) %>% addTiles() %>%  # Add default OpenStreetMap map tiles
-    #     addMarkers(lng=~coordinates.longitude, lat=~coordinates.latitude,
-    #                      popup=~paste("Name: ",yelp_insp_data$name,
-    #                                   "<br>address: ",yelp_insp_data$location.address1,
-    #                                   "<br>boro: " ,yelp_insp_data$boro,
-    #                                   "<br>cuisine: ",yelp_insp_data$cuisine,
-    #                                   "<br>grade: ",yelp_insp_data$grade,
-    #                                   "<br>ratings1: ",yelp_insp_data$ratings1), clusterOptions = markerClusterOptions()) %>%
-    #     setView(-73.945242, 40.710610, 11)
-    # 
-    # })
 
 ###############################################################################################
     

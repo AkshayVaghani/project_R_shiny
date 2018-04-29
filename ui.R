@@ -86,7 +86,6 @@ shinyUI(dashboardPage(skin='green',
           # heat map base on inspection score
           # indicate the location wise eviews or inspection score
           
-          
           tabItem(tabName = "heatmap",
                   #Creation and outputting of heat map
                   leafletOutput("heat", height = "900", width="100%"),
@@ -116,10 +115,7 @@ shinyUI(dashboardPage(skin='green',
                            column(3,selectizeInput("rating_tb", label="Pick a rating:", choices = NULL, multiple = TRUE)),
                            dataTableOutput("table1")))
           
-          # tabItem(tabName = "data1",
-          #         fluidRow(box(DT::dataTableOutput("table1"), width = 12)))
-          # 
-          
+         
         )
         
         

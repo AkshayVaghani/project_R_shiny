@@ -1,0 +1,12 @@
+name: NYC_Restaurants
+title: NYC_Restaurants
+username:
+account: akshayvaghani
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 333763
+bundleId: 1346249
+url: https://akshayvaghani.shinyapps.io/NYC_Restaurants/
+when: 1525041825.76182
+asMultiple: FALSE
+asStatic: FALSE
