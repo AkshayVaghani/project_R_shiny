@@ -3,3 +3,11 @@
   font-weight: bold;
   font-size: 24px;
 }
+
+#controls {
+ padding: 8px; 
+ opacity: 0.92; 
+ background: #f7f6fc; 
+ z-index: 1000; 
+  
+}

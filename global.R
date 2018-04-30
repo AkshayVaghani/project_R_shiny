@@ -26,7 +26,6 @@ library(ggmap)
 library(leaflet.extras)
 library(stringr)
 
-
 # 
 # 
 # # convert matrix to dataframe

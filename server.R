@@ -137,40 +137,29 @@ shinyServer(function(input, output,session){
     )
     
     #Add markers based on the filtered data
-    leafletProxy("map1", data = filtered_map) %>%
-      clearMarkerClusters() %>%
-      addAwesomeMarkers(lng=~coordinates.longitude, lat=~coordinates.latitude, icon = icons,
-                        clusterOptions = markerClusterOptions(),
-                        popup=paste("Name: ",yelp_insp_data$name,
-                                     "<br>address: ",yelp_insp_data$location.address1,
-                                     "<br>boro: " ,yelp_insp_data$boro,
-                                     "<br>cuisine: ",yelp_insp_data$cuisine,
-                                     "<br>grade: ",yelp_insp_data$grade,
-                                     "<br>ratings1: ",yelp_insp_data$ratings1)) %>%
-                                     {ifelse(input$boro_layer,
-                                             leafletProxy("map1") %>%
-                                               addPolygons(data=boro_layer,
-                                                           color = topo.colors(5,alpha = NULL),
-                                                           fillColor = topo.colors(5,alpha = NULL),
-                                                           smoothFactor = .5,
-                                                           layerId = LETTERS[1:6]),
-                                             leafletProxy("map1") %>% removeShape(layerId = LETTERS[1:6]))}
 
-  })
-  
-#   #Add markers based on the filtered data
-#   leafletProxy("map1", data = filtered_map) %>% 
-#     clearMarkerClusters() %>%
-#     addAwesomeMarkers(lng=~coordinates.longitude, lat=~coordinates.latitude, icon = icons,
-#                       clusterOptions = markerClusterOptions(),
-#                       popup=paste("Name: ",yelp_insp_data$name,
-#                                    "<br>address: ",yelp_insp_data$location.address1,
-#                                    "<br>boro: " ,yelp_insp_data$boro,
-#                                    "<br>cuisine: ",yelp_insp_data$cuisine,
-#                                    "<br>grade: ",yelp_insp_data$grade,
-#                                    "<br>ratings1: ",yelp_insp_data$ratings1)) 
-# })
-#   
+  leafletProxy("map1", data = filtered_map) %>%
+    clearMarkerClusters() %>%
+    addAwesomeMarkers(~coordinates.longitude,~coordinates.latitude, icon = icons,
+                      clusterOptions = markerClusterOptions(),
+                      popup=paste("Name: ",yelp_insp_data$name,
+                                   "<br>address: ",yelp_insp_data$location.address1,
+                                   "<br>boro: " ,yelp_insp_data$boro,
+                                   "<br>cuisine: ",yelp_insp_data$cuisine,
+                                   "<br>grade: ",yelp_insp_data$grade,
+                                   "<br>ratings1: ",yelp_insp_data$ratings1)) %>%
+                                   {ifelse(input$boro_layer,
+                                           leafletProxy("map1") %>%
+                                             addPolygons(data=boro_layer,
+                                                         color = topo.colors(5,alpha = NULL),
+                                                         fillColor = topo.colors(5,alpha = NULL),
+                                                         smoothFactor = .5,
+                                                         layerId = LETTERS[1:6]),
+                                           leafletProxy("map1") %>% removeShape(layerId = LETTERS[1:6]))}
+
+})
+
+
   #Check to see if an address was put into the search bar
   observeEvent(c(input$search), {
     if(input$location != "") {

@@ -67,19 +67,35 @@ shinyUI(dashboardPage(skin='green',
                           
                           # restaurents on map
                           tabItem(tabName = "map1",
-                                  # fluidRow(box(leafletOutput("map1",height = "900", width="100%"),height =1000,width = 100)),
-                                  leafletOutput("map1",height = "900", width="100%"),
-                                  
                                   #Creation of data filter panel for the cluster map
-                                  absolutePanel(id = "controls", class = "panel panel-default",
-                                                draggable = TRUE, top = 160, right = "auto", bottom = "auto",
-                                                width = 330, height = "auto", style = "padding: 8px; opacity: 0.92; background: #f7f6fc;",
-                                                h2("Data Filter"),
-                                                selectInput("cuisine_map", label = "Select a Cuisine:", cuisinelist),
-                                                selectInput("boro_map", label = "Select a Borough:", borolist),
-                                                textInput("location", label = "Type an address below:", value = ""),
-                                                actionButton("search", label = "Find Address"),
-                                                checkboxInput("boro_layer", "Show Boroughs", value = FALSE))
+                                  # absolutePanel(id = "controls", class = "panel panel-default",
+                                  #               draggable = TRUE, top = 0, right = "auto", bottom = "auto",
+                                  #               width = 330, height = "auto", style = "padding: 8px; opacity: 0.92; background: #f7f6fc;",
+                                  #               h2("Data Filter"),
+                                  #               selectInput("cuisine_map", label = "Select a Cuisine:", cuisinelist),
+                                  #               selectInput("boro_map", label = "Select a Borough:", borolist),
+                                  #               textInput("location", label = "Type an address below:", value = ""),
+                                  #               actionButton("search", label = "Find Address"),
+                                  #               checkboxInput("boro_layer", "Show Boroughs", value = FALSE)),
+                                  
+                                  # fluidRow(box(leafletOutput("map1",height = "900", width="100%"),height =1000,width = 100)),
+                                  fluidRow(
+                                    absolutePanel(id = "controls", class = "panel panel-default",
+                                                  draggable = TRUE, top = 0, right = "auto", bottom = "auto", fixed=TRUE,
+                                                  width = 330, height = "auto", #style = "padding: 8px; opacity: 0.92; background: #f7f6fc; z-index: 1000;",
+                                                  h2("Data Filter"),
+                                                  selectInput("cuisine_map", label = "Select a Cuisine:", cuisinelist),
+                                                  selectInput("boro_map", label = "Select a Borough:", borolist),
+                                                  textInput("location", label = "Type an address below:", value = ""),
+                                                  actionButton("search", label = "Find Address"),
+                                                  checkboxInput("boro_layer", "Show Boroughs", value = FALSE)),
+                                    leafletOutput("map1",height = "900", width="100%")
+
+                                  )
+                                  
+                                  
+                                  
+
                           ),
                           
                           # heat map base on reviews
