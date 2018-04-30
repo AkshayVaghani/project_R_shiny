@@ -13,14 +13,28 @@ library(data.table)
 library(leaflet,quietly=TRUE)
 library(maps,quietly=TRUE)
 
+library(shiny)
+library(shinydashboard)
+library(data.table)
+library(leaflet)
+library(DT)
+library(rgdal)
+library(plotly)
+library(lubridate)
+library(dplyr)
+library(ggmap)
+library(leaflet.extras)
+library(stringr)
 
 
-# convert matrix to dataframe
-state_stat <- data.frame(state.name = rownames(state.x77), state.x77)
-# remove row names
-rownames(state_stat) <- NULL
-# create variable with colnames as choice
-choice <- colnames(state_stat)[-1]
+# 
+# 
+# # convert matrix to dataframe
+# state_stat <- data.frame(state.name = rownames(state.x77), state.x77)
+# # remove row names
+# rownames(state_stat) <- NULL
+# # create variable with colnames as choice
+# choice <- colnames(state_stat)[-1]
 
 ######################################################################################
 ######################################################################################
@@ -28,9 +42,12 @@ choice <- colnames(state_stat)[-1]
 yelp_insp_data <- fread(file = "./yelp_insp.csv")
 yelp_insp_data <- as.data.frame(yelp_insp_data)
 
+boro_layer <- readOGR(path.expand("/Users/akshay/Desktop/Project_1_shinyApp/shinyDashBoard/nybb_18a"), "nybb")
+#Open and transform the shape file for the boroughs
+boro_layer <- spTransform(boro_layer, CRS("+proj=longlat +datum=WGS84"))
+
 # create variable with colnames as choice
-choice1 <- colnames(yelp_insp_data)[-1]
-choice1 <- colnames(yelp_insp_data)[-1]
+#choice1 <- colnames(yelp_insp_data)[-1]
 
 
 ######################################################################################
