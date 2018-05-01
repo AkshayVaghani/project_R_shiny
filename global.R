@@ -11,6 +11,7 @@ library(googleVis)
 library(data.table)
 library(leaflet.extras)
 library(rgdal)
+library(ggmap)
 
 ######################################################################################
 # read data file

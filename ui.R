@@ -1,7 +1,7 @@
 # UI for shiny app
 
 shinyUI(dashboardPage(skin='green',
-                      dashboardHeader(title = "NYC Restaurents inspection scores and reviews", titleWidth = 800),
+                      dashboardHeader(title = "NYC restaurents reviews and inspection scores", titleWidth = 800),
                       dashboardSidebar(
                         width = 250,
                         sidebarUserPanel("AKSHAY VAGHANI", 'laltaki@gmail.com',
@@ -13,7 +13,8 @@ shinyUI(dashboardPage(skin='green',
                                    menuSubItem('inspection grade by cuisine',tabName='cuisine',icon = icon("bar-chart")),
                                    menuSubItem('reviews by boro',tabName='boro_rev',icon = icon("bar-chart")),
                                    menuSubItem('reviews by cuisine',tabName='cuisine_rev',icon = icon("bar-chart")),
-                                   menuSubItem('reviews vs inspection score',tabName='rev_insp_scat',icon = icon("bar-chart"))),
+                                   menuSubItem('reviews vs inspection score',tabName='rev_insp_scat',icon = icon("bar-chart")),
+                                   menuSubItem('density plots',tabName='rev_insp_dens',icon = icon("bar-chart"))),
                           menuItem("Map1", tabName = "map1", icon = icon("map")),
                           menuItem("HeatMap",tabName = "heatmap", icon = icon('fire')),
                           menuItem("Data1", tabName = "data1", icon = icon("database"))
@@ -32,7 +33,7 @@ shinyUI(dashboardPage(skin='green',
                           # inspection grade by boro
                           tabItem(tabName='boro',
                                   # title header
-                                  h2('resraurant inspection grade by boro'),
+                                  h2('Resraurant inspection grade by boro'),
                                   # filter restaurents by boro
                                   fluidRow(box(selectizeInput("boro1","Boro", 
                                                               borolist, selected='ALL'), width=10)),
@@ -40,29 +41,34 @@ shinyUI(dashboardPage(skin='green',
                           
                           # inspection grade by cuisine
                           tabItem(tabName='cuisine',
-                                  h2('resraurant inspection grade by cuisine'),
+                                  h2('Resraurant inspection grade by cuisine'),
                                   fluidRow(box(selectizeInput("cuisine1","Cuisine", 
                                                               cuisinelist, selected='ALL'), width=10)),
                                   fluidRow(box(plotlyOutput("plotcuisine"), width=10))),
                           
-                          #review by boro
+                          # review by boro
                           tabItem(tabName='boro_rev',
-                                  h2('resraurant reviews by boro'),
+                                  h2('Resraurant reviews by boro'),
                                   fluidRow(box(selectizeInput("boro2","Boro", 
                                                               borolist, selected='ALL'), width=10)),
                                   fluidRow(box(plotlyOutput("plotboro_rev"), width=10))),
                           
                           # review by cuisine
                           tabItem(tabName='cuisine_rev',
-                                  h2('resraurant reviews by cuisine'),
+                                  h2('Resraurant reviews by cuisine'),
                                   fluidRow(box(selectizeInput("cuisine2","Cuisine", 
                                                               cuisinelist, selected='ALL'), width=10)),
                                   fluidRow(box(plotlyOutput("plotcuisine_rev"), width=10))),
                           
                           # scatter plot for reviews and inspection score
                           tabItem(tabName='rev_insp_scat',
-                                  h2('resraurant reviews and inspection scatter'),
+                                  h2('Resraurant reviews and inspection scatter'),
                                   fluidRow(box(plotlyOutput("rev_insp_scat"), height = "150%",width='100%'))),
+                          
+                          # scatter plot for reviews and inspection score
+                          tabItem(tabName='rev_insp_dens',
+                                  h2('Resraurant reviews and inspection scatter'),
+                                  fluidRow(box(plotlyOutput("rev_insp_dens"), height = "150%",width='100%'))),
                           
                           
                           # restaurents on map
@@ -93,9 +99,6 @@ shinyUI(dashboardPage(skin='green',
 
                                   )
                                   
-                                  
-                                  
-
                           ),
                           
                           # heat map base on reviews
@@ -117,11 +120,9 @@ shinyUI(dashboardPage(skin='green',
                                                 actionButton("search_heat", label = "Find Address")
                                   )
                           ),
-                          
-                          
-                          
-                          # data table
-                          
+                    
+                         
+                           # data table
                           #Tab to view the entire datatable
                           tabItem(tabName = "data1",
                                   #A row of filters for the datatable
