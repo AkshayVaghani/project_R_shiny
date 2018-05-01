@@ -5,8 +5,8 @@ account: akshayvaghani
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 333763
-bundleId: 1346249
+bundleId: 1348603
 url: https://akshayvaghani.shinyapps.io/NYC_Restaurants/
-when: 1525041825.76182
+when: 1525141391.59326
 asMultiple: FALSE
 asStatic: FALSE

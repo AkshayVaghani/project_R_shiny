@@ -13,7 +13,7 @@ shinyUI(dashboardPage(skin='green',
                                    menuSubItem('inspection grade by cuisine',tabName='cuisine',icon = icon("bar-chart")),
                                    menuSubItem('reviews by boro',tabName='boro_rev',icon = icon("bar-chart")),
                                    menuSubItem('reviews by cuisine',tabName='cuisine_rev',icon = icon("bar-chart")),
-                                   menuSubItem('reviews vs inspection score',tabName='rev_insp_scat',icon = icon("scat-chart"))),
+                                   menuSubItem('reviews vs inspection score',tabName='rev_insp_scat',icon = icon("bar-chart"))),
                           menuItem("Map1", tabName = "map1", icon = icon("map")),
                           menuItem("HeatMap",tabName = "heatmap", icon = icon('fire')),
                           menuItem("Data1", tabName = "data1", icon = icon("database"))

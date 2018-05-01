@@ -1,8 +1,8 @@
+# shiny app server 
 
 shinyServer(function(input, output,session){
   
-  
-  #### plot inspection grade by boro    
+  ##### plot inspection grade by boro    
   reactboro=reactive({
     count.boro %>% 
       filter_(ifelse(input$boro1=="ALL",'boro %in% unique(count.boro$boro)','boro==input$boro1')) %>%
@@ -34,7 +34,7 @@ shinyServer(function(input, output,session){
   })
   
   
-  #### plot of review by boro    
+  ##### plot of review by boro    
   reactboro_rev=reactive({
     rev.count.boro %>% 
       filter_(ifelse(input$boro2=="ALL",'boro %in% unique(rev.count.boro$boro)','boro==input$boro2')) %>%
@@ -64,13 +64,7 @@ shinyServer(function(input, output,session){
              yaxis = list(title = "Cuisine"), showlegend = TRUE)
   })    
   
-  # scatter plot between reviews and inspection score
-  
-  output$rev_insp_scat1= renderPlotly({ggplotly(ggplot(data=rev.insp.data, aes(y=rev.insp.data$score,x=rev.insp.data$rating, color = boro,alpha=0.1)) +
-                                                  geom_point() + 
-                                                  geom_jitter(width = 1, height = 1) + 
-                                                  ggtitle("geom_jitter: scatterplots"))})
-  
+ 
   # scattered plot to compare ratings and inspection score
   pal <- c("red","blue","green","orange","yellow")
   pal <- setNames(pal, c("BRONX", "BROOKLYN", "MANHATTAN","STATEN ISLAND","QUEENS"))
@@ -86,15 +80,14 @@ shinyServer(function(input, output,session){
   
   
   ################################################################################################
-  
+  # initial cluster map
   output$map1 = renderLeaflet({
     leaflet() %>%
       addProviderTiles("Esri.WorldStreetMap") %>%
       setView(-73.945242, 40.710610, 11)
   })
   
-  
-  ###PURPOSE: take in a data frame and assigns colors to map icons based on crime type
+  ###PURPOSE: take in a data frame and assigns colors to map icons based ratings
   ###OUTPUT: Strings (of various colors)
   ###NOTE: Function had to be unnamed because of interaction between addingAwesomeMarkers and named vectors
   getColor = function(df) {
@@ -115,18 +108,16 @@ shinyServer(function(input, output,session){
   }
   
   
-  ################################## ADDING OF CLUSTER MARKERS ##################################
- # filtered_map = yelp_insp_data[!(is.na(coordinates.latitude) | is.na(coordinates.longitude))]
+  ################################## ADD CLUSTER MARKERS ##################################
   filtered_map = yelp_insp_data
   #Check if any of the cluster map filters or borough layers have been triggered
   observeEvent(c(input$boro_layer, input$boro_map, input$cuisine_map), {
-    #Filter the data accordingly
-    
+    #Filter the data base on condition
     if(input$boro_map != "ALL") {
-      filtered_map = filtered_map %>% filter(.,boro == input$boro_map)
+      filtered_map = filtered_map %>% filter(boro == input$boro_map)
     }
     if(input$cuisine_map != "ALL") {
-      filtered_map = filtered_map %>% filter(.,cuisine == input$cuisine_map)
+      filtered_map = filtered_map %>% filter(cuisine == input$cuisine_map)
     }
     
     #Initialize icons, calling getColor to find the proper color
@@ -137,29 +128,28 @@ shinyServer(function(input, output,session){
     )
     
     #Add markers based on the filtered data
-
-  leafletProxy("map1", data = filtered_map) %>%
-    clearMarkerClusters() %>%
-    addAwesomeMarkers(~coordinates.longitude,~coordinates.latitude, icon = icons,
-                      clusterOptions = markerClusterOptions(),
-                      popup=paste("Name: ",yelp_insp_data$name,
-                                   "<br>address: ",yelp_insp_data$location.address1,
-                                   "<br>boro: " ,yelp_insp_data$boro,
-                                   "<br>cuisine: ",yelp_insp_data$cuisine,
-                                   "<br>grade: ",yelp_insp_data$grade,
-                                   "<br>ratings1: ",yelp_insp_data$ratings1)) %>%
-                                   {ifelse(input$boro_layer,
-                                           leafletProxy("map1") %>%
-                                             addPolygons(data=boro_layer,
-                                                         color = topo.colors(5,alpha = NULL),
-                                                         fillColor = topo.colors(5,alpha = NULL),
-                                                         smoothFactor = .5,
-                                                         layerId = LETTERS[1:6]),
-                                           leafletProxy("map1") %>% removeShape(layerId = LETTERS[1:6]))}
-
-})
-
-
+    leafletProxy("map1", data = filtered_map) %>%
+      clearMarkerClusters() %>%
+      addAwesomeMarkers(~coordinates.longitude,~coordinates.latitude, icon = icons,
+                        clusterOptions = markerClusterOptions(),
+                        popup=paste("Name: ",filtered_map$name,
+                                    "<br>cuisine: ",filtered_map$cuisine,
+                                    "<br>grade: ",filtered_map$grade,
+                                    "<br>ratings1: ",filtered_map$ratings1,
+                                    "<br>address: ",filtered_map$location.address1,
+                                    "<br>boro: " ,filtered_map$boro)) %>%
+                                    {ifelse(input$boro_layer,
+                                            leafletProxy("map1") %>%
+                                              addPolygons(data=boro_layer,
+                                                          color = topo.colors(5,alpha = NULL),
+                                                          fillColor = topo.colors(5,alpha = NULL),
+                                                          smoothFactor = .5,
+                                                          layerId = LETTERS[1:6]),
+                                            leafletProxy("map1") %>% removeShape(layerId = LETTERS[1:6]))}
+    
+  })
+  
+  
   #Check to see if an address was put into the search bar
   observeEvent(c(input$search), {
     if(input$location != "") {
@@ -169,22 +159,21 @@ shinyServer(function(input, output,session){
     }
   })
   
-  
   ###############################################################################################
-  ################################## DRAWING OF INITIAL HEAT MAP ##################################
+  
+  ################################## DRAW HEAT MAP ##################################
   output$heat = renderLeaflet({
     leaflet() %>%
       addProviderTiles(providers$CartoDB.DarkMatter) %>%
       setView(-73.945242, 40.710610, 11) %>% 
       addPolygons(data = boro_layer,
-                 stroke = FALSE, 
-                smoothFactor = 0.5)
+                  stroke = FALSE, 
+                  smoothFactor = 0.5)
   })
   
   ################################## ADDING OF HEAT INDICATORS ##################################
   
-  #filtered_map = nyc_crimes[!(is.na(Latitude) | is.na(Longitude))]
-  
+  #filtered data base on boro and cuisine for heat map
   filtered_map=yelp_insp_data
   #See if any of the heat map filters were triggered
   observeEvent(c(input$cuisine_heat,input$boro_heat), {
@@ -224,12 +213,6 @@ shinyServer(function(input, output,session){
   updateSelectizeInput(session, "cuisine_tb", choices = unique(yelp_insp_data$cuisine), server = TRUE)
   updateSelectizeInput(session, "score_tb", choices = unique(yelp_insp_data$grade), server = TRUE)
   updateSelectizeInput(session, "rating_tb", choices = unique(yelp_insp_data$rating), server = TRUE)
-  #  updateSelectizeInput(session, "boro_filter", choices = unique(nyc_crimes$BORO_NM), server = TRUE)
-  
-  ####################### INPUT FILTERS FOR THE GRAPHS ###################################################
-  
-  #updateSelectizeInput(session, "date_map", choices = unique(nyc_crimes$MONTH_YEAR), server = TRUE)
-  #updateSelectizeInput(session, "date_heat", choices = unique(nyc_crimes$MONTH_YEAR), server = TRUE)
   
   ################################## FILTERING OF THE DATATABLE ##################################
   
