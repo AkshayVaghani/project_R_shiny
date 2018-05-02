@@ -7,14 +7,14 @@ shinyUI(dashboardPage(skin='green',
                         sidebarUserPanel("AKSHAY VAGHANI", 'laltaki@gmail.com',
                                          image = "https://yt3.ggpht.com/-04uuTMHfDz4/AAAAAAAAAAI/AAAAAAAAAAA/Kjeupp-eNNg/s100-c-k-no-rj-c0xffffff/photo.jpg"),
                         sidebarMenu(
-                          
+                          menuItem("Home", tabName = "img", icon = icon("home")),
                           menuItem("Overview", icon = icon("bar-chart"),
-                                   menuSubItem('inspection grade by boro',tabName='boro',icon = icon("bar-chart")),
-                                   menuSubItem('inspection grade by cuisine',tabName='cuisine',icon = icon("bar-chart")),
-                                   menuSubItem('reviews by boro',tabName='boro_rev',icon = icon("bar-chart")),
-                                   menuSubItem('reviews by cuisine',tabName='cuisine_rev',icon = icon("bar-chart")),
-                                   menuSubItem('reviews vs inspection score',tabName='rev_insp_scat',icon = icon("bar-chart")),
-                                   menuSubItem('density plots',tabName='rev_insp_dens',icon = icon("bar-chart"))),
+                                   menuSubItem('Inspection grade by boro',tabName='boro',icon = icon("bar-chart")),
+                                   menuSubItem('Inspection grade by cuisine',tabName='cuisine',icon = icon("bar-chart")),
+                                   menuSubItem('Reviews by boro',tabName='boro_rev',icon = icon("bar-chart")),
+                                   menuSubItem('Reviews by cuisine',tabName='cuisine_rev',icon = icon("bar-chart")),
+                                   menuSubItem('Reviews vs inspection score',tabName='rev_insp_scat',icon = icon("bar-chart")),
+                                   menuSubItem('Density plots',tabName='rev_insp_dens',icon = icon("bar-chart"))),
                           menuItem("Map1", tabName = "map1", icon = icon("map")),
                           menuItem("HeatMap",tabName = "heatmap", icon = icon('fire')),
                           menuItem("Data1", tabName = "data1", icon = icon("database"))
@@ -29,7 +29,8 @@ shinyUI(dashboardPage(skin='green',
                         
                         # menu items 
                         tabItems(
-                          
+                          tabItem(tabName='img',fluidRow(box(img(src="res_img.jpg", height='600',width="200%")))
+                                  ),
                           # inspection grade by boro
                           tabItem(tabName='boro',
                                   # title header
@@ -62,12 +63,12 @@ shinyUI(dashboardPage(skin='green',
                           
                           # scatter plot for reviews and inspection score
                           tabItem(tabName='rev_insp_scat',
-                                  h2('Resraurant reviews and inspection scatter'),
+                                  h2('Review-inspection score scatter plot'),
                                   fluidRow(box(plotlyOutput("rev_insp_scat"), height = "150%",width='100%'))),
                           
-                          # scatter plot for reviews and inspection score
+                          # density plots
                           tabItem(tabName='rev_insp_dens',
-                                  h2('Resraurant reviews and inspection scatter'),
+                                  h2('Density plot'),
                                   fluidRow(box(plotlyOutput("rev_insp_dens"), height = "150%",width='100%'))),
                           
                           

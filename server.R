@@ -27,10 +27,10 @@ shinyServer(function(input, output,session){
   })
   
   m <- list(
-    l = 100,
-    r = 80,
-    b = 100,
-    t = 100,
+    l = 120,
+    r = 70,
+    b = 50,
+    t = 50,
     pad = 4
   )
   
@@ -92,8 +92,7 @@ shinyServer(function(input, output,session){
   
 # density plots
   p <- ggplot(rev.insp.data, aes(rating, fill = boro)) +
-    geom_density(alpha = 0.5, position = "stack") +
-    ggtitle("stacked density chart")
+    geom_density(alpha = 0.5, position = "stack") 
   
   output$rev_insp_dens= renderPlotly({ggplotly(p) %>% layout(autosize = T,margin=m, width = 700, height = 450,title = "Density plot", showlegend=TRUE) 
   })
@@ -149,8 +148,6 @@ shinyServer(function(input, output,session){
       library = "ion",
       markerColor = getColor(filtered_map)
     )
-    
-    print(filtered_map)
     
 #Add markers based on the filtered data
     leafletProxy("map1", data = filtered_map) %>%
